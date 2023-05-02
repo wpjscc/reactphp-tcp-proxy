@@ -16,7 +16,7 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConne
     ->then(function (React\Socket\ConnectionInterface $connection) use ($proxyConnection, $fn, &$buffer)  {
 
         $proxyConnection->removeListener('data', $fn);
-
+        $fn = null;
         $proxyConnection->pipe($connection);
         $connection->pipe($proxyConnection);
 
