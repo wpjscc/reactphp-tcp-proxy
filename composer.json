@@ -1,0 +1,7 @@
+{
+    "name": "wpjscc/reactphp-tcp-proxy",
+    "type": "project",
+    "require": {
+        "react/socket": "^1.12"
+    }
+}
