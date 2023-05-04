@@ -27,7 +27,7 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConne
 
     }, function (Exception $e) use ($proxyConnection) {
         $proxyConnection->write("HTTP/1.1 502 Bad Gateway\r\n\r\n".$e->getMessage());
-        $proxyConnection->close();
+        $proxyConnection->end();
     });
 });
 
