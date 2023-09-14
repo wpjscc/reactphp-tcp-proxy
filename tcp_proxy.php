@@ -12,7 +12,13 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConne
         $buffer .= $data;
     });
 
-    (new React\Socket\Connector(array('timeout' => 3.0)))
+    (new React\Socket\Connector(array(
+        'timeout' => 3.0,
+        // 'tcp' => new Clue\React\HttpProxy\ProxyConnector('192.168.43.1:8234'), //可以做个跳板(http proxy)
+        // 'tcp' => new Clue\React\Socks\Client('192.168.43.1:8235'), // 可以做个跳板(socket proxy),
+        // 'tcp' => new Clue\React\SshProxy\SshProcessConnector('user@ip'), //可以做个跳板(ssh proxy)
+        // 'dns' => false,
+    )))
     ->connect("tcp://".getParam("--dest-host").":".getParam("--dest-port"))
     ->then(function (React\Socket\ConnectionInterface $connection) use ($proxyConnection, $fn, &$buffer)  {
         print($connection->getLocalAddress()."\n");
@@ -30,7 +36,7 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConne
 
     }, function (Exception $e) use ($proxyConnection) {
         $proxyConnection->write("HTTP/1.1 502 Bad Gateway\r\n\r\n".$e->getMessage());
-        $proxyConnection->close();
+        $proxyConnection->end();
     });
 });
 
