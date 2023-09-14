@@ -10,6 +10,6 @@ services:
       - /bin/sh
       - -c
       - |
-        php tcp_proxy.php --dest-host=10.8.0.1 --dest-port=30080
+        php tcp_proxy.php --dest-host=10.8.0.1 --dest-port=8080
     
 
