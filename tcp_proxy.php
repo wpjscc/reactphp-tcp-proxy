@@ -3,9 +3,10 @@
 require './vendor/autoload.php';
 
 
-$socket = new React\Socket\SocketServer('0.0.0.0:'.getParam('--local-port'));
+$socket = new React\Socket\SocketServer('0.0.0.0:'.getParam('--local-port', 80));
 
 $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConnection) {
+    print($proxyConnection->getRemoteAddress()."\n");
     $buffer = '';
     $proxyConnection->on('data', $fn = function ($data) use (&$buffer) {
         $buffer .= $data;
@@ -14,6 +15,8 @@ $socket->on('connection', function (React\Socket\ConnectionInterface $proxyConne
     (new React\Socket\Connector(array('timeout' => 3.0)))
     ->connect("tcp://".getParam("--dest-host").":".getParam("--dest-port"))
     ->then(function (React\Socket\ConnectionInterface $connection) use ($proxyConnection, $fn, &$buffer)  {
+        print($connection->getLocalAddress()."\n");
+        print($connection->getRemoteAddress()."\n");
 
         $proxyConnection->removeListener('data', $fn);
         $fn = null;

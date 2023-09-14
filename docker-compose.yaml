@@ -1,0 +1,15 @@
+version: "3"
+services:
+  php_tcp_proxy:
+    build:
+      context: ./
+    container_name: php_tcp_proxy
+    ports:
+      - "7080:80"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        php tcp_proxy.php --dest-host=10.8.0.1 --dest-port=30080
+    
+
